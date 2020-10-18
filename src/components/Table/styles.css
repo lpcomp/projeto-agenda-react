@@ -1,0 +1,77 @@
+
+/***** tabela contatos *****/
+.tableContacts{
+  padding: 3vmin 0;
+}
+
+.tableContacts table {
+  width: 100%;
+  border-collapse: collapse;
+  border-radius: 1vmin;
+  border-style: hidden;
+  box-shadow: 0 0 0 0.2vmin #e1e1e1;
+  background-color: #fff;
+  overflow: hidden;
+}
+
+.tableContacts tr{
+  border: 1px solid #e1e1e1;
+  cursor: pointer;
+}
+
+.tableContacts tr:hover{
+  background-color: #fff3f2;
+}
+.tableContacts tr:first-child{
+  cursor: auto;
+}
+.tableContacts tr:first-child:hover{
+  background-color: #fff;
+}
+
+.tableContacts tr td:last-child{
+  text-align: right;
+}
+
+.tableContacts td, th {  
+  text-align: left;
+  padding: 1.5vmin;
+  font-size: 1.7vmin;
+}
+
+.tableContacts td{
+  color: #2a2d3b;
+}
+
+.tableContacts th{
+  color: #9198af;
+}
+
+.firstLettername{
+  font-size: 2vmin;
+  margin: 0 1vmin;
+  padding: 0.5vmin 0;
+  background-color: #fa8d68;
+  border-radius: 100%;
+  width: 3vmin;
+  height: 3vmin;
+  display: inline-block;
+  text-align: center;
+  font-weight: bold;
+  color: #fff;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btConfigTable{
+  background: none;
+  outline: none;
+  border: none;
+  cursor: pointer;
+  margin: 0 1vmin;
+}
+.btConfigTable img{
+  width: 2.2vmin;
+}

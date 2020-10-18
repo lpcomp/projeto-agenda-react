@@ -1,0 +1,187 @@
+.boxNotebook {
+  padding: 2vmin;
+}
+
+/***** header search *****/
+.headerNotebook{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+.logoNotebook{
+  width: 18vmin;
+}
+
+.boxRightHeader{
+  width: 112vmin;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-end;
+}
+.btCreate{
+  width: 17%;
+  border-radius: 5vmin;
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.16);
+  border: solid 1px rgba(255, 255, 255, 0.16);
+  background-color: #dbff90;
+  font-size: 2vmin;
+  font-weight: 500;
+  color: #fa7268;
+  padding: 1vmin;
+  outline: none;
+  cursor: pointer;
+}
+.btCreate img{
+  width: 1.5vmin;
+  margin-right: 1vmin;
+}
+
+.boxSearchNotebook{
+  width: 75%;
+  border-radius: 4px;
+  background-color: #e4e7f4;
+  margin-left: 3%;
+  padding: 0.5vmin;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+.boxSearchNotebook input{
+  font-size: 2vmin;
+  width: 90%;
+  background: none;
+  border: none;
+  outline: none;
+  padding: 0 1vmin 0 0;
+}
+.boxSearchNotebook img{
+  width: 2.5vmin;
+  margin: 0.5vmin 0;
+}
+
+/***** sem contato *****/
+.contactless{
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 15vmin;
+}
+.contactless img{
+  width: 30vmin;
+}
+.contactless p{
+  color: #2a2d3b;
+  font-size: 2vmin;
+  margin: 2vmin 0;
+}
+.contactless button{
+  width: 18vmin;
+  padding: 1vmin;
+}
+.contactless button img{
+  width: 1.5vmin;
+}
+
+/***** dialog *****/
+.boxDialog{
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  background-color: rgba(39, 39, 39, 0.86);
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  display: none;
+}
+
+.boxDialogContent{
+  width: 100%;
+  max-width: 60vmin;
+  background-color: #fff;
+  border-radius: 1vmin;
+}
+
+.boxDialogContent header{
+  padding: 2vmin;
+  border-bottom: 0.3vmin solid #c0c3d2;
+}
+.boxDialogContent header p{
+  color: #2a2d3b;
+  font-size: 2.5vmin;
+}
+
+.boxDialogContent footer{
+  padding: 2vmin;
+  border-top: 0.3vmin solid #c0c3d2;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-end;
+}
+.boxDialogContent footer button{
+  background: none;
+  outline: none;
+  cursor: pointer;
+  color: #fa7268;
+  border: none;
+  font-size: 2.5vmin;
+  font-weight: 500;
+}
+.boxDialogContent footer button:last-child{
+  background: #fa7268;
+  color: #fff;
+  border-radius: 2.5vmin;
+  padding: 1.5vmin 2.5vmin;
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.16);
+  margin-left: 1.5vmin;
+  opacity: 0.5;
+}
+
+.contactContent{
+
+}
+.contactContent .contentDialog{
+  display: flex;
+  flex-direction: column;
+}
+.contactContent .contentDialog label{
+  color: #2a2d3b;
+  font-size: 2vmin;
+  display: flex;
+  flex-direction: column;
+  margin: 1vmin 2.5vmin;
+  width: 92%;
+}
+.contactContent .contentDialog label:last-child{
+  width: 45%;
+}
+.contactContent .contentDialog label input{
+  border: 0.3vmin solid #c0c3d2;
+  outline: none;
+  background: none;
+  border-radius: 0.5vmin;
+  padding: 1vmin;
+  font-size: 2vmin;
+}
+
+.deleteContent{
+  display: none;
+}
+.deleteContent .contentDialog{
+  padding: 3vmin;
+  padding-bottom: 7vmin;
+}
+.deleteContent .contentDialog p{
+  color: #2a2d3b;
+  font-size: 2vmin;
+}
