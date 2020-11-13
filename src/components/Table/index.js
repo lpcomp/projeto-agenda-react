@@ -22,19 +22,19 @@ function Table(props) {
                   <tr key={contact.email} style={{ backgroundColor: contact.fresh? '#fff3f2' : '#fff' }}>
                     <td>
                       <span 
-                        style={{ backgroundColor: contact.pickColor }}
+                        style={{ backgroundColor:  contact.pickColor }}
                         className="firstLettername">
                           {contact.letter}
                       </span>
                       {contact.name}
                     </td>
-                    <td>{contact.email}</td>
+                    <td data-testid={`user-list-${contact.email}`}>{contact.email}</td>
                     <td>{contact.telephone}</td>
                     <td>
-                      <button className="btConfigTable" onClick={()=> props.editContact(contact.email)}>
+                      <button className="btConfigTable" onClick={()=> props.editContact(contact)}>
                         <img src={editIcon} />
                       </button>
-                      <button className="btConfigTable" onClick={()=> props.openDeleteModal(contact.email)}>
+                      <button className="btConfigTable" onClick={()=> props.openDeleteModal(contact)}>
                         <img src={deleteIcon} />
                       </button>
                     </td>
