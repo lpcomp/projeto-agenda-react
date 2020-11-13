@@ -174,9 +174,6 @@
   font-size: 2vmin;
 }
 
-.deleteContent{
-  display: none;
-}
 .deleteContent .contentDialog{
   padding: 3vmin;
   padding-bottom: 7vmin;

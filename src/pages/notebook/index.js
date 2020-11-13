@@ -3,50 +3,26 @@ import './styles.css';
 import logo from '../../assets/images/ic-logo.svg';
 import searchIcon from '../../assets/images/ic-search.svg';
 import plusIcon from '../../assets/images/ic-plus.svg';
-import contactlessIcon from '../../assets/images/ic-book.svg';
 
-import Table from '../../components/Table';
+import { DeleteModal } from './components/DeleteModal';
+import { EditModal } from './components/EditModal';
+import { UserList } from './UserList';
+import { BUTTON_CREATE_TEST_ID, ContactsMock } from './constants';
+import { createColorFromName, filterContactsByQuery } from './utils';
 
 function Notebook() {
-  const [showModal, setShowModal] = useState('none');
-  const [modalContact, setModalContact] = useState('none');
-  const [modalDelete, setModalDelete] = useState('none');  
+  const [modalName, setModalName] = useState('');
+  const [modalData, setModalData] = useState(undefined);
   
-  const [opacityBt, setOpacityBt] = useState(0.5);
-  const [pointerBt, setPointerBt] = useState('none');
-  const [titleModal, setTitleModal] = useState('Criar novo');
-
-  const [emailDeleted, setEmailDeleted] = useState('');
-  
-  const [dataForm, setDataForm] = useState({
-    name: "",
-    email: "",
-    telephone: ""
-  });
-
-  const [searchResult, setSearchResult] = useState([]);
-  const [contacts, setContacts] = useState([
-    {
-      name: 'Luiz',
-      email: 'teste@gmail.com',
-      telephone: '(11)997013533',
-      letter: 'L',
-      pickColor: '#fab668'
-    },
-    {
-      name: 'João',
-      email: 'joao@gmail.com',
-      telephone: '(11)997014533',
-      letter: 'J',
-      pickColor: '#90d26c'
-    },
-  ]);
+  const [contacts, setContacts] = useState(ContactsMock);
+  const [searchResult, setSearchResult] = useState(contacts);
+  const [ query, setQuery ] = useState(null);
 
   useEffect(() => {
     const timeout = setTimeout(() => {
 
       const editFresh = contacts.map(contact => {
-        if(contact.fresh){
+        if (contact.fresh) {
           return { ...contact, fresh: false }
         } else {
           return contact;
@@ -54,224 +30,98 @@ function Notebook() {
       });
 
       setContacts(editFresh);
-
     }, 10000);
 
     return () => clearTimeout(timeout);
   }, [contacts]);
 
-  function newContact() {
-    setDataForm({name: "", email: "", telephone: ""});
-    setTitleModal('Criar novo');
-
-    setShowModal('flex');
-    setModalContact('block');
-  }
-
-  function openDeleteModal(email) {
-    setEmailDeleted(email);
-    setOpacityBt(1);
-    setPointerBt('all');
-
-    setShowModal('flex');
-    setModalDelete('block');
-  }
-
-  function closeContact() {
-    setShowModal('none');
-    setModalContact('none');
-    setModalDelete('none');
-
-    setOpacityBt(0.5);
-    setPointerBt('none');
-  }  
-
-  const handleChangeInput = e =>{
-   
-    const { name, value } = e.target;
-    setDataForm((prevState) => ({
-      ...prevState,
-      [name]: value
-    }));
-
-    setOpacityBt(1);
-    setPointerBt('all');
-
-  }
-
-  function handleContact(event) {
-    event.preventDefault();
-
-    const verifyEmail = contacts.find(contact => dataForm.email === contact.email);    
-
-    if(verifyEmail){
-      
-      const editFormContact = contacts.map(contact => {
-        if(contact.email === verifyEmail.email){
-          return { 
-            name: dataForm.name,
-            email: dataForm.email, 
-            telephone: dataForm.telephone,
-            letter: dataForm.letter,
-            pickColor: dataForm.pickColor
-          }          
-        } else {
-          return contact;
-        }
-      });
-      console.log(editFormContact);
-      setContacts(editFormContact);
-
-    }else{
-      const colors = ['#fa8d68', '#90d26c', '#68a0fa', '#fab668', '#8368fa', '#fa68b5', '#5fe2c4', '#f55a5a'];
-      const letter = dataForm.name.split('')[0];
-      const pickColor = colors[Math.floor(Math.random() * colors.length)];
-
-      setContacts([...contacts, {...dataForm, fresh: true, letter, pickColor}]);
+  useEffect(() => {
+    if(query) {
+      return setSearchResult(filterContactsByQuery(query, contacts));
     }
-    
-    console.log(contacts);
-    
-    closeContact();
-  }
 
-  function editContact(emailEdit) {
-    const contact = contacts.find(contact => emailEdit === contact.email);
-    setOpacityBt(1);
-    setPointerBt('all');
-    
-    newContact();
-    setTitleModal('Editar');
-
-    setDataForm(
-      contact
-    );
-    
-  }
-
-  function deleteContact() {
-    setContacts(contacts.filter(contact => contact.email !== emailDeleted));
-    closeContact();
-  }
+    return setSearchResult(contacts);
+  }, [ query, contacts ]);
 
   function searchContacts(e) {
-    let tempSearch = e.target.value;
+    setQuery(e.target.value);
+  }
 
-    const result = contacts.filter( contact => contact.name.toLowerCase().includes(tempSearch.toLowerCase()) || contact.email.toLowerCase().includes(tempSearch.toLowerCase()));
-    console.log(result);
-    console.log(tempSearch);
-    setSearchResult( tempSearch !== '' ? result : [] );
+  function closeModal() {
+    setModalName('');
+    setModalData(undefined);
+  }
+
+  function openEditModal(contact = null) {
+    setModalName('edit');
+    setModalData(contact);
+  }
+
+  function openDeleteModal(contact = null) {
+    setModalName('delete');
+    setModalData(contact);
+  }
+
+  function onContactDelete(contact) {
+    setContacts(contacts.filter(it => it.email !== contact.email ));
+    closeModal();
+  }
+
+  function onContactEdit(contact) {
+    const user = contacts.find(it => it.email === contact.email);
+    
+    if(!user) {
+      setContacts([...contacts, {
+        ...contact,
+        letter: contact.name.split('')[0],
+        pickColor: createColorFromName(contact.name),
+        fresh: true,
+      }]);
+    } else {
+      setContacts(contacts.map(it => {
+        if(it.email !== contact.email) return it;
+        return { ...it, ...contact }
+      }))
+    }
+    
+    closeModal();
   }
 
   return (
     <div className="boxNotebook">
 
       <header className="headerNotebook">
-        <img src={logo} className="logoNotebook" />
+        <img src={logo} className="logoNotebook" alt="Logo" />
 
         <div className="boxRightHeader">
-          <button 
+          <button
             style={{ display: contacts.length > 0 ? 'block' : 'none' }}
-            className="btCreate" 
-            onClick={()=> newContact()}
+            className="btCreate"
+            onClick={openEditModal}
+            data-testid={BUTTON_CREATE_TEST_ID}
           >
-            <img src={plusIcon} />
+            <img src={plusIcon} alt="Plus" />
             Criar contato
           </button>
 
           <div className="boxSearchNotebook">
             <input placeholder='Buscar...' onChange={(e) => searchContacts(e)} />
-            <img src={searchIcon} />
-          </div> 
-        </div>               
+            <img src={searchIcon} alt="Search" />
+          </div>
+        </div>
       </header>
 
-      {contacts.length > 0 ? (
-        <Table
-          contacts={ searchResult.length > 0 ? searchResult : contacts }
-          editContact={editContact} 
-          openDeleteModal={openDeleteModal} 
-        />
-      ) : (
-        <section className="contactless">
-          <img src={contactlessIcon} />
-          <p>Nenhum contato foi criado ainda.</p>
-          <button className="btCreate" onClick={()=> newContact()}>
-            <img src={plusIcon} />
-            Criar contato
-          </button>
-        </section>
-      )}      
-        
-      <div style={{ display: showModal }} className="boxDialog">
+      <UserList 
+        contacts={searchResult} 
+        createContact={openEditModal} 
+        editContact={openEditModal} 
+        deleteContact={openDeleteModal} 
+      />
 
-          <section className="boxDialogContent">
-            
-            <section style={{ display: modalContact }} className="contactContent">
-              <form onSubmit={handleContact}>
-                <header>
-                  <p>{titleModal} contato</p>
-                </header>
-                <section className="contentDialog">
+      <DeleteModal onCloseModal={closeModal} isOpen={modalName === 'delete'} userData={modalData} onDelete={onContactDelete} />
+      <EditModal onCloseModal={closeModal} isOpen={modalName === 'edit'} userData={modalData} onSave={onContactEdit} />
 
-                  <label>
-                    Nome
-                    <input 
-                      name="name"
-                      value={dataForm.name}
-                      type="text" 
-                      onChange={handleChangeInput}
-                      required
-                    />
-                  </label>
-                  
-                  <label>
-                    E-mail
-                    <input
-                      name="email"
-                      value={dataForm.email}
-                      type="email" 
-                      onChange={handleChangeInput}
-                      required
-                    />
-                  </label>
-                  
-                  <label>
-                    Telefone
-                    <input
-                      name="telephone"
-                      value={dataForm.telephone}
-                      type="tel"
-                      onChange={handleChangeInput}
-                      required
-                    />
-                  </label>                    
-                  
-                </section>
-                <footer>
-                  <button type="button" onClick={()=> closeContact()} >Cancelar</button>
-                  <button type="submit" style={{ opacity: opacityBt, pointerEvents: pointerBt }}>Salvar</button>
-                </footer>
-              </form>
-            </section>
-
-            <section style={{ display: modalDelete }} className="deleteContent">
-                <header>
-                  <p>Excluir contato</p>
-                </header>
-                <section className="contentDialog">
-                  <p>Deseja realmente excluir o contato?</p>
-                </section>
-                <footer>
-                  <button type="button" onClick={()=> closeContact()} >Cancelar</button>
-                  <button type="submit" style={{ opacity: opacityBt, pointerEvents: pointerBt }} onClick={()=> deleteContact()} >Excluir</button>
-                </footer>              
-            </section>
-            
-          </section>
-
-        </div>
-      </div>
+    </div>
   );
 }
 
